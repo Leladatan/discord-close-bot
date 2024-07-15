@@ -52,7 +52,7 @@ module.exports = {
           let count = 0;
 
           store.forEach((player) => {
-            message += `**${count + 1}. ${player.name} - Позиции: `;
+            message += `${count + 1}. ${player.name} - Позиции: `;
             if (player.pos1) {
               message += `Легкая: ${player.pos1} `;
             }
@@ -73,7 +73,6 @@ module.exports = {
               message += `Полная поддержка: ${player.pos5} `;
             }
 
-            message += "**";
             count += 1;
           });
 
