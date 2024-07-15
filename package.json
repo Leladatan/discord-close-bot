@@ -1,0 +1,15 @@
+{
+  "name": "close-bot",
+  "version": "1.0.0",
+  "description": "Бот Close Dota 2 предназначен для автоматизации процесса распределения игроков игры Dota 2 до её запуска. ",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "commands": "node deploy-commands.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5"
+  }
+}
