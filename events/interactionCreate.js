@@ -82,15 +82,16 @@ module.exports = {
 
           await interaction.reply(message);
           break;
-        case
-        'leave'
-        :
+        case 'leave':
           if (store.has(user.username)) {
             store.delete(user.username);
             await interaction.reply(`${user.globalName}(${user.username}) покинул клоз.`);
             break;
           }
           await interaction.reply(`${user.globalName}(${user.username}) вы не зарегистрированы на клоз.`);
+          break;
+        case 'balance':
+          await interaction.reply('Балансировка');
           break;
       }
     }

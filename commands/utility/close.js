@@ -7,6 +7,10 @@ const row = new ActionRowBuilder()
       .setLabel('Зарегистрироваться')
       .setStyle(ButtonStyle.Primary),
     new ButtonBuilder()
+      .setCustomId('balance')
+      .setLabel('Сбалансировать')
+      .setStyle(ButtonStyle.Primary),
+    new ButtonBuilder()
       .setCustomId('list')
       .setLabel('Список')
       .setStyle(ButtonStyle.Secondary),

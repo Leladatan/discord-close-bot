@@ -1,4 +1,5 @@
 require('dotenv').config();
+const BalanceTeam = require('./utils/balance-mmr');
 const fs = require('node:fs');
 const path = require('node:path');
 const {Client, GatewayIntentBits, Collection} = require('discord.js');
