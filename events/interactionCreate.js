@@ -1,6 +1,8 @@
-const {Events} = require('discord.js');
+const {Events, EmbedBuilder} = require('discord.js');
 const registrationModal = require('../components/modals/modal-register');
 const store = require('../store/index');
+const distributePlayers = require('../utils/distribute-players');
+const BalanceMMR = require('../utils/balance-mmr');
 
 module.exports = {
   name: Events.InteractionCreate,
@@ -91,7 +93,34 @@ module.exports = {
           await interaction.reply(`${user.globalName}(${user.username}) вы не зарегистрированы на клоз.`);
           break;
         case 'balance':
-          await interaction.reply('Балансировка');
+          const testData = [
+            { name: "1", pos1: 0, pos2: 0, pos3: 0, pos4: 0, pos5: 10 },
+            { name: "2", pos1: 0, pos2: 20, pos3: 0, pos4: 0, pos5: 0 },
+            { name: "3", pos1: 0, pos2: 0, pos3: 30, pos4: 0, pos5: 0 },
+            { name: "4", pos1: 0, pos2: 0, pos3: 0, pos4: 40, pos5: 0 },
+            { name: "5", pos1: 0, pos2: 0, pos3: 0, pos4: 0, pos5: 50 },
+            { name: "6", pos1: 10, pos2: 20, pos3: 30, pos4: 40, pos5: 50 },
+            { name: "7", pos1: 10, pos2: 20, pos3: 30, pos4: 40, pos5: 50 },
+            { name: "8", pos1: 10, pos2: 20, pos3: 30, pos4: 40, pos5: 50 },
+            { name: "9", pos1: 10, pos2: 20, pos3: 30, pos4: 40, pos5: 50 },
+            { name: "10", pos1: 10, pos2: 10, pos3: 10, pos4: 10, pos5: 50 },
+          ];
+          const {players, error} = distributePlayers(testData);
+
+          const balanced = BalanceMMR(players);
+
+          const description = '## Команда A \n## Команда B  ';
+
+          const embed = new EmbedBuilder()
+            .setColor(0x0099FF)
+            .setTitle('Распределение игроков по командам.')
+            .setDescription(error ? error : description)
+            .setTimestamp()
+            .setFooter({text: 'Предоставлено Close Bot'});
+
+          await interaction.reply({
+            embeds: [embed],
+          });
           break;
       }
     }
