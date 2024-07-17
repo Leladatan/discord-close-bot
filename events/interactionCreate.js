@@ -101,7 +101,20 @@ module.exports = {
           await interaction.reply(`${user.globalName}(${user.username}) вы не зарегистрированы на клоз.`);
           break;
         case 'balance':
-          const {players, error} = distributePlayers(store);
+          let countStoreItems = 0;
+
+          store.forEach(() => {
+            countStoreItems++;
+          });
+
+          if (countStoreItems !== 10) {
+            await interaction.reply({
+              content: 'Недостаточно игроков для проведения клоза.',
+            });
+            break;
+          }
+
+          const {players, error} = distributePlayers(store.map(player => player));
           const [team1, team2] = balanceTeams(players);
 
           let description = `## Команда Radiant (${team1.reduce((acc, player) => acc + player.mmr, 0)})\n`;
