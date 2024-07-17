@@ -62,7 +62,7 @@ module.exports = {
           let count = 0;
 
           store.forEach((player) => {
-            message += `${count + 1}. ${player.name} - Позиции: `;
+            message += `${count + 1}. <@${player.id}> - Позиции: `;
             if (player.pos1) {
               message += `Легкая: ${player.pos1} `;
             }
