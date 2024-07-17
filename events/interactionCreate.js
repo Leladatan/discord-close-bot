@@ -29,6 +29,12 @@ module.exports = {
       }
     } else if (interaction.isModalSubmit()) {
       if (interaction.customId === 'modal-register') {
+        let count = 0;
+
+        store.forEach(() => {
+          count++;
+        });
+
         const user = interaction.user;
 
         const fields = interaction.fields;
@@ -41,7 +47,7 @@ module.exports = {
 
         store.set(user.username, {id: user.id, name: user.username, pos1, pos2, pos3, pos4, pos5});
 
-        await interaction.reply(`${user.globalName}(${user.username}) зарегистрировался на клоз!`);
+        await interaction.reply(count === 10 ? 'Регистрация на клоз невозможна, список набран.' : `${user.globalName}(${user.username}) зарегистрировался на клоз!`);
       }
     } else if (interaction.isButton()) {
       const user = interaction.user;
@@ -95,20 +101,7 @@ module.exports = {
           await interaction.reply(`${user.globalName}(${user.username}) вы не зарегистрированы на клоз.`);
           break;
         case 'balance':
-          const testData = [
-            {id: 1, name: "1", pos1: 7000, pos2: 5000, pos3: 0, pos4: 0, pos5: 0},
-            {id: 1, name: "2", pos1: 3000, pos2: 10000, pos3: 5000, pos4: 0, pos5: 0},
-            {id: 1, name: "3", pos1: 0, pos2: 0, pos3: 3000, pos4: 5000, pos5: 5000},
-            {id: 1, name: "4", pos1: 7000, pos2: 0, pos3: 0, pos4: 0, pos5: 7000},
-            {id: 1, name: "5", pos1: 0, pos2: 0, pos3: 0, pos4: 0, pos5: 2000},
-            {id: 1, name: "6", pos1: 6000, pos2: 6000, pos3: 0, pos4: 0, pos5: 0},
-            {id: 1, name: "7", pos1: 5000, pos2: 5000, pos3: 5000, pos4: 5000, pos5: 5000},
-            {id: 1, name: "8", pos1: 0, pos2: 3500, pos3: 3500, pos4: 3500, pos5: 3500},
-            {id: 1, name: "9", pos1: 0, pos2: 3000, pos3: 3000, pos4: 3000, pos5: 3000},
-            {id: 1, name: "10", pos1: 0, pos2: 7000, pos3: 0, pos4: 7000, pos5: 7000},
-          ];
-
-          const {players, error} = distributePlayers(testData);
+          const {players, error} = distributePlayers(store);
           const [team1, team2] = balanceTeams(players);
 
           let description = `## Команда Radiant (${team1.reduce((acc, player) => acc + player.mmr, 0)})\n`;
