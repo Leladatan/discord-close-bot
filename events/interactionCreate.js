@@ -2,7 +2,9 @@ const {Events, EmbedBuilder} = require('discord.js');
 const registrationModal = require('../components/modals/modal-register');
 const store = require('../store/index');
 const distributePlayers = require('../utils/distribute-players');
-const BalanceMMR = require('../utils/balance-mmr');
+const balanceTeams = require('../utils/balance-teams');
+const getPositionOnNumber = require('../utils/get-position-on-number');
+const getEmojiOnNumber = require('../utils/get-emoji-on-number');
 
 module.exports = {
   name: Events.InteractionCreate,
@@ -37,7 +39,7 @@ module.exports = {
         const pos4 = +fields.getTextInputValue('pos4');
         const pos5 = +fields.getTextInputValue('pos5');
 
-        store.set(user.username, {name: user.username, pos1, pos2, pos3, pos4, pos5});
+        store.set(user.username, {id: user.id, name: user.username, pos1, pos2, pos3, pos4, pos5});
 
         await interaction.reply(`${user.globalName}(${user.username}) зарегистрировался на клоз!`);
       }
@@ -94,22 +96,30 @@ module.exports = {
           break;
         case 'balance':
           const testData = [
-            { name: "1", pos1: 0, pos2: 0, pos3: 0, pos4: 0, pos5: 10 },
-            { name: "2", pos1: 0, pos2: 20, pos3: 0, pos4: 0, pos5: 0 },
-            { name: "3", pos1: 0, pos2: 0, pos3: 30, pos4: 0, pos5: 0 },
-            { name: "4", pos1: 0, pos2: 0, pos3: 0, pos4: 40, pos5: 0 },
-            { name: "5", pos1: 0, pos2: 0, pos3: 0, pos4: 0, pos5: 50 },
-            { name: "6", pos1: 10, pos2: 20, pos3: 30, pos4: 40, pos5: 50 },
-            { name: "7", pos1: 10, pos2: 20, pos3: 30, pos4: 40, pos5: 50 },
-            { name: "8", pos1: 10, pos2: 20, pos3: 30, pos4: 40, pos5: 50 },
-            { name: "9", pos1: 10, pos2: 20, pos3: 30, pos4: 40, pos5: 50 },
-            { name: "10", pos1: 10, pos2: 10, pos3: 10, pos4: 10, pos5: 50 },
+            {id: 1, name: "1", pos1: 7000, pos2: 5000, pos3: 0, pos4: 0, pos5: 0},
+            {id: 1, name: "2", pos1: 3000, pos2: 10000, pos3: 5000, pos4: 0, pos5: 0},
+            {id: 1, name: "3", pos1: 0, pos2: 0, pos3: 3000, pos4: 5000, pos5: 5000},
+            {id: 1, name: "4", pos1: 7000, pos2: 0, pos3: 0, pos4: 0, pos5: 7000},
+            {id: 1, name: "5", pos1: 0, pos2: 0, pos3: 0, pos4: 0, pos5: 2000},
+            {id: 1, name: "6", pos1: 6000, pos2: 6000, pos3: 0, pos4: 0, pos5: 0},
+            {id: 1, name: "7", pos1: 5000, pos2: 5000, pos3: 5000, pos4: 5000, pos5: 5000},
+            {id: 1, name: "8", pos1: 0, pos2: 3500, pos3: 3500, pos4: 3500, pos5: 3500},
+            {id: 1, name: "9", pos1: 0, pos2: 3000, pos3: 3000, pos4: 3000, pos5: 3000},
+            {id: 1, name: "10", pos1: 0, pos2: 7000, pos3: 0, pos4: 7000, pos5: 7000},
           ];
+
           const {players, error} = distributePlayers(testData);
+          const [team1, team2] = balanceTeams(players);
 
-          const balanced = BalanceMMR(players);
+          let description = `## Команда Radiant (${team1.reduce((acc, player) => acc + player.mmr, 0)})\n`;
+          team1.forEach((player, index) => {
+            description += `${getEmojiOnNumber(index + 1)}  ${getPositionOnNumber(player.pos)} (${player.mmr}) - <@${player.id}>\n\n`;
+          });
 
-          const description = '## Команда A \n## Команда B  ';
+          description += `## Команда Dire (${team2.reduce((acc, player) => acc + player.mmr, 0)})\n`;
+          team2.forEach((player, index) => {
+            description += `${getEmojiOnNumber(index + 1)}  ${getPositionOnNumber(player.pos)} (${player.mmr}) - <@${player.id}>\n\n`;
+          });
 
           const embed = new EmbedBuilder()
             .setColor(0x0099FF)

@@ -12,7 +12,7 @@ const distributePlayers = (arr) => {
     // Проверьте, на какую позицию можно назначить игрока
     for (let j = 0; j < 5; j++) {
       if (player[`pos${j + 1}`] > 0 && positionCounts[j] < 2 && !positions[j].includes(player.name)) {
-        players.push({ name: player.name, pos: j + 1, mmr: player[`pos${j + 1}`] });
+        players.push({ id: player.id, name: player.name, pos: j + 1, mmr: player[`pos${j + 1}`] });
         positions[j].push(player.name);
         positionCounts[j]++;
         hasPosition = true;
